@@ -51,7 +51,10 @@ internal class PokemonServiceTest {
         `when`(pokemonRepository.save(PokemonCreator.createPokemonToBeSaved()))
                 .thenReturn(Mono.just(pokemon))
 
-        `when`(pokemonRepository.delete(ArgumentMatchers.any(Pokemon::class.java)))
+        `when`(pokemonRepository.deleteById(ArgumentMatchers.anyLong()))
+                .thenReturn(Mono.empty())
+
+        `when`(pokemonRepository.save(PokemonCreator.createValidUpdatedPokemon()))
                 .thenReturn(Mono.empty())
     }
 
@@ -102,7 +105,29 @@ internal class PokemonServiceTest {
     fun delete_RemovesPokemon_WhenSuccessful() {
         StepVerifier.create(pokemonService.delete(1))
                 .expectSubscription()
-                .verifyComplete();
+                .verifyComplete()
     }
+
+    @Test
+    @DisplayName("update save updated pokemon and returns empty mono when successful")
+    fun update_saveUpdatedPokemon_WhenSuccessful() {
+        StepVerifier.create(pokemonService.update(PokemonCreator.createValidUpdatedPokemon()))
+                .expectSubscription()
+                .verifyComplete()
+    }
+
+    @Test
+    @DisplayName("update returns Mono error when pokemon does not exist")
+    fun update_ReturnMonoError_WhenEmptyMonoIsReturned() {
+        `when`(pokemonService.get(ArgumentMatchers.anyLong()))
+                .thenReturn(Mono.empty())
+
+        StepVerifier.create(pokemonService.update(PokemonCreator.createValidUpdatedPokemon()))
+                .expectSubscription()
+                .expectError(ResponseStatusException::class.java)
+                .verify()
+    }
+
+
 
 }
