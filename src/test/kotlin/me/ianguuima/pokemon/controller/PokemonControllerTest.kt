@@ -49,6 +49,9 @@ internal class PokemonControllerTest {
 
         `when`(pokemonService.save(any()))
                 .thenReturn(Mono.just(pokemon))
+
+        `when`(pokemonService.delete(ArgumentMatchers.anyLong()))
+                .thenReturn(Mono.empty())
     }
 
     @Test
@@ -79,5 +82,14 @@ internal class PokemonControllerTest {
                 .expectNext(pokemon)
                 .verifyComplete()
     }
+
+    @Test
+    @DisplayName("delete removes the pokemon when successful")
+    fun delete_RemovesPokemon_WhenSuccessful() {
+        StepVerifier.create(pokemonController.delete(1))
+                .expectSubscription()
+                .verifyComplete()
+    }
+
 
 }

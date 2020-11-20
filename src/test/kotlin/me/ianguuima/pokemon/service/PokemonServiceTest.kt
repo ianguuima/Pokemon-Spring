@@ -17,6 +17,7 @@ import reactor.blockhound.BlockHound
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
+import com.nhaarman.mockito_kotlin.any
 
 @ExtendWith(SpringExtension::class)
 
@@ -47,7 +48,7 @@ internal class PokemonServiceTest {
         `when`(pokemonRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Mono.just(pokemon))
 
-        `when`(pokemonRepository.save(PokemonCreator.createPokemonToBeSaved()))
+        `when`(pokemonRepository.save(any()))
                 .thenReturn(Mono.just(pokemon))
 
         `when`(pokemonRepository.deleteById(ArgumentMatchers.anyLong()))
