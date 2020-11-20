@@ -39,7 +39,7 @@ class PokemonController(
     }
 
     @DeleteMapping("{id}")
-    fun update(@PathVariable id : Long) : Mono<Void> {
+    fun delete(@PathVariable id : Long) : Mono<Void> {
         return pokemonService.delete(id)
     }
 
