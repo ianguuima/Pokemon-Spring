@@ -1,6 +1,5 @@
 package me.ianguuima.pokemon.controller
 
-import me.ianguuima.pokemon.repository.PokemonRepository
 import me.ianguuima.pokemon.service.PokemonService
 import me.ianguuima.pokemon.util.PokemonCreator
 import org.junit.jupiter.api.BeforeAll
@@ -9,7 +8,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers
-import org.mockito.BDDMockito
+import org.mockito.BDDMockito.`when`
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -40,14 +39,26 @@ internal class PokemonControllerTest {
 
     @BeforeEach
     fun setup() {
-        BDDMockito.`when`(pokemonService.getAll())
+        `when`(pokemonService.getAll())
                 .thenReturn(Flux.just(pokemon))
+
+        `when`(pokemonService.get(ArgumentMatchers.anyLong()))
+                .thenReturn(Mono.just(pokemon))
     }
 
     @Test
     @DisplayName("find all return a flux of pokemon")
     fun findAll_returnFluxOfAnime_WhenSuccessful() {
         StepVerifier.create(pokemonController.getAll())
+                .expectSubscription()
+                .expectNext(pokemon)
+                .verifyComplete()
+    }
+
+    @Test
+    @DisplayName("getById returns Mono with anime when it exists")
+    fun findById_returnMonoOfAnime_WhenSuccessful() {
+        StepVerifier.create(pokemonController.getById(1))
                 .expectSubscription()
                 .expectNext(pokemon)
                 .verifyComplete()
