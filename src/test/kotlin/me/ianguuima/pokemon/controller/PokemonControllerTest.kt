@@ -52,6 +52,9 @@ internal class PokemonControllerTest {
 
         `when`(pokemonService.delete(ArgumentMatchers.anyLong()))
                 .thenReturn(Mono.empty())
+
+        `when`(pokemonService.update(PokemonCreator.createValidUpdatedPokemon()))
+                .thenReturn(Mono.empty())
     }
 
     @Test
@@ -87,6 +90,14 @@ internal class PokemonControllerTest {
     @DisplayName("delete removes the pokemon when successful")
     fun delete_RemovesPokemon_WhenSuccessful() {
         StepVerifier.create(pokemonController.delete(1))
+                .expectSubscription()
+                .verifyComplete()
+    }
+
+    @Test
+    @DisplayName("update save updated pokemon and returns empty mono when successful")
+    fun update_saveUpdatedPokemon_WhenSuccessful() {
+        StepVerifier.create(pokemonController.update(1, PokemonCreator.createValidUpdatedPokemon()))
                 .expectSubscription()
                 .verifyComplete()
     }
