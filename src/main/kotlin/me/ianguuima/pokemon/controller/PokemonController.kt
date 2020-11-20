@@ -18,6 +18,7 @@ class PokemonController(
 ) {
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     fun getAll(): Flux<Pokemon> {
         return pokemonService.getAll()
     }
