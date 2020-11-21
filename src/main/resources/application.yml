@@ -7,8 +7,9 @@ logging:
   level:
     org:
       springframework:
+        cache: trace
         data:
-          r2dbc: DEBUG
+          r2dbc: trace
 server:
   error:
     include-message: always

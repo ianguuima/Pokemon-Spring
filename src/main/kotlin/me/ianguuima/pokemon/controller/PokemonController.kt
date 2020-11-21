@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.Duration
 import javax.validation.Valid
 
 @RestController
@@ -24,6 +25,7 @@ class PokemonController(
     }
 
     @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun getById(@PathVariable id: Long): Mono<Pokemon> {
         return pokemonService.get(id)
     }
@@ -35,11 +37,13 @@ class PokemonController(
     }
 
     @PutMapping("{id}")
-    fun update(@PathVariable id : Long, @RequestBody @Valid pokemon: Pokemon) : Mono<Void> {
+    @ResponseStatus(HttpStatus.OK)
+    fun update(@PathVariable id : Long, @RequestBody @Valid pokemon: Pokemon) : Mono<Pokemon> {
         return pokemonService.update(pokemon.copy(id = id))
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun delete(@PathVariable id : Long) : Mono<Void> {
         return pokemonService.delete(id)
     }

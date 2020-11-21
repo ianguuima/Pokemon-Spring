@@ -9,15 +9,20 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
 import org.mockito.BDDMockito
+import org.mockito.BDDMockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.web.server.ResponseStatusException
 import reactor.blockhound.BlockHound
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 
 
@@ -45,9 +50,11 @@ class AnimeControllerIT {
 
     @BeforeEach
     fun setup() {
-        BDDMockito.`when`(pokemonRepository.findAll())
+        `when`(pokemonRepository.findAll())
                 .thenReturn(Flux.just(pokemon))
 
+        `when`(pokemonRepository.findById(anyLong()))
+                .thenReturn(Mono.just(pokemon))
     }
 
     @Test
@@ -74,6 +81,39 @@ class AnimeControllerIT {
                 .expectBodyList(Pokemon::class.java)
                 .hasSize(1)
                 .contains(pokemon)
+    }
+
+
+    @Test
+    @DisplayName("getById returns Mono with anime when it exists")
+    fun findById_returnMonoOfAnime_WhenSuccessful() {
+        testClient
+                .get()
+                .uri("/pokemon/{id}", 1)
+                .exchange()
+                .expectStatus().isOk
+                .expectBody<Pokemon>()
+                .isEqualTo(pokemon)
+    }
+
+    @Test
+    @DisplayName("getById returns Mono error when anime does not exist")
+    fun findById_returnMonoError_WhenEmptyMonoIsReturned() {
+        `when`(pokemonRepository.findById(anyLong()))
+                .thenReturn(Mono.empty())
+
+
+        testClient
+                .get()
+                .uri("/pokemon/{id}", 1)
+                .exchange()
+                .expectStatus().isNotFound
+                .expectBody()
+    }
+
+
+    fun methodInKotlin() {
+        println("this is a Kotlin method!")
     }
 
 
