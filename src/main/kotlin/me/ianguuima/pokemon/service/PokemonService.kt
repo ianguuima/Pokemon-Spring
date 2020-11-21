@@ -23,14 +23,14 @@ class PokemonService(
 
     @Cacheable(cacheNames = [cacheName], key = "#root.method.name")
     fun getAll(): Flux<Pokemon> {
-        return pokemonRepository.findAll().cache(Duration.ofSeconds(5))
+        return pokemonRepository.findAll().cache()
     }
 
     @Cacheable(cacheNames = [cacheName], key = "#id")
     fun get(id: Long): Mono<Pokemon> {
         return pokemonRepository.findById(id).switchIfEmpty(
                 Mono.error(ResponseStatusException(HttpStatus.NOT_FOUND, "Pokemon not found!"))
-        ).cache(Duration.ofSeconds(5))
+        ).cache()
     }
 
     @CacheEvict(cacheNames = [cacheName], allEntries = true)
