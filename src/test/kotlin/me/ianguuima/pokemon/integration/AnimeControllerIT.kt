@@ -20,7 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.web.server.ResponseStatusException
-import reactor.blockhound.BlockHound
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -38,15 +37,6 @@ class AnimeControllerIT {
     lateinit var testClient: WebTestClient
 
     private val pokemon = PokemonCreator.createValidPokemon()
-
-    companion object {
-
-        @BeforeAll
-        fun blockHoundSetup() {
-            BlockHound.install()
-        }
-
-    }
 
     @BeforeEach
     fun setup() {

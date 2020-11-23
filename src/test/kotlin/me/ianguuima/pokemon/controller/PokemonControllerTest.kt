@@ -13,7 +13,6 @@ import org.mockito.BDDMockito.`when`
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import reactor.blockhound.BlockHound
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -29,15 +28,6 @@ internal class PokemonControllerTest {
     lateinit var pokemonService: PokemonService
 
     private val pokemon = PokemonCreator.createValidPokemon()
-
-    companion object {
-
-        @BeforeAll
-        fun blockHoundSetup() {
-            BlockHound.install()
-        }
-
-    }
 
     @BeforeEach
     fun setup() {

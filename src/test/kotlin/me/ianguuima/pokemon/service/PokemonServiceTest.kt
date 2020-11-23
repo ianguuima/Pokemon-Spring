@@ -13,7 +13,6 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.server.ResponseStatusException
-import reactor.blockhound.BlockHound
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -30,15 +29,6 @@ internal class PokemonServiceTest {
     lateinit var pokemonRepository: PokemonRepository
 
     private val pokemon = PokemonCreator.createValidPokemon()
-
-    companion object {
-
-        @BeforeAll
-        fun blockHoundSetup() {
-            BlockHound.install()
-        }
-
-    }
 
     @BeforeEach
     fun setup() {
