@@ -4,7 +4,7 @@ pipeline {
         pollSCM '* * * * *'
     }
     stages {
-        stage {
+        stage('Test Version') {
             steps {
                 sh 'mvn -v'
             }
