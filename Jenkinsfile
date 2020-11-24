@@ -1,21 +1,24 @@
 pipeline {
+    tools {
+        maven 'M3'
+    }
     agent any
     triggers {
         pollSCM '* * * * *'
     }
     stages {
         stage('Test Version') {
-            withMaven {
+            steps {
                 sh 'mvn -v'
             }
         }
         stage('Build') {
-            withMaven {
+            steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
         }
         stage('Test') {
-            withMaven {
+            steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true test'
             }
         }
