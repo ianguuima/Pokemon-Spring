@@ -5,17 +5,17 @@ pipeline {
     }
     stages {
         stage('Test Version') {
-            steps {
+            withMaven {
                 sh 'mvn -v'
             }
         }
         stage('Build') {
-            steps {
+            withMaven {
                 sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
         }
         stage('Test') {
-            steps {
+            withMaven {
                 sh 'mvn -Dmaven.test.failure.ignore=true test'
             }
         }
